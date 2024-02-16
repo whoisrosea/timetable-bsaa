@@ -1,0 +1,159 @@
+// Определение переменных для повторяющихся значений
+$border-color: rgba(0, 0, 0, 0.157);
+$background-color-header: rgba(178, 214, 255, 0.407);
+$odd-div-bg-color: rgba(241, 241, 241, 0.449);
+$even-div-bg-color: rgba(158, 158, 158, 0.133);
+$card-width: 750px;
+$mobile-breakpoint: 768px;
+
+
+@mixin respond-to($media) {
+  @if $media == "mobile" {
+    @media (max-width: $mobile-breakpoint) {
+      @content;
+    }
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: $card-width;
+  height: auto;
+  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  margin: 20px;
+  border-radius: 8px;
+  padding: 20px;
+
+  input {
+    text-align: center;
+  }
+
+  &Header {
+    p,
+    h2 {
+      margin: 0;
+    }
+
+    h2 {
+      color: rgba(0, 0, 0, 0.776);
+    }
+    width: 100%;
+    padding: 2% 0;
+    background-color: $background-color-header;
+    border-bottom: 1px solid $border-color;
+  }
+
+  &Info {
+    p {
+      margin: 0;
+    }
+
+    div {
+      display: flex;
+      justify-content: space-between;
+      padding-right: 10%;
+    }
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    padding: 20px 0px;
+    border-bottom: 1px solid $border-color;
+    margin-bottom: 20px;
+  }
+
+  &Schedule {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    &Row {
+      display: grid;
+      grid-template-columns: 2fr 0.5fr 3fr;
+      flex-grow: 1;
+      gap: 0;
+
+      .textArea {
+        width: 100%;
+        max-height: 100px;
+      }
+
+      div {
+        padding: 10px 10%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid $border-color;
+
+        &:nth-child(odd) {
+          background-color: $odd-div-bg-color;
+        }
+      }
+
+      &:nth-child(even) {
+        div {
+          background-color: $even-div-bg-color;
+        }
+      }
+    }
+
+    .note1 {
+      grid-template-columns: 2fr 0.5fr 3fr;
+    }
+    .note2 {
+      grid-template-columns: 1.5fr 0.5fr 4fr;
+    }
+
+    .pod1 {
+      grid-template-columns: 2fr 0.5fr 3fr; 
+    }
+
+    .pod2 {
+      grid-template-columns: 1.5fr 0.5fr 2fr 2fr; 
+    }
+  }
+
+  .header {
+    div {
+      background-color: white !important;
+    }
+  }
+
+  .selectContainer {
+    div {
+      border: none;
+      padding: 0 !important;
+    }
+    display: flex;
+    padding: 0px 10%;
+
+    .select {
+      flex-grow: 1;
+    }
+  }
+}
+
+@include respond-to("mobile") {
+  .card {
+    width: 95%;
+    margin: 10px;
+
+    &Info {
+      display: block;
+    }
+
+    &ScheduleRow,
+    .note1,
+    .note2,
+    .pod1,
+    .pod2 {
+      grid-template-columns: 1fr;
+    }
+
+    .selectContainer {
+      padding: 0;
+    }
+  }
+}
