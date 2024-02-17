@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/timetable-bsaa/static/css/main.787c5f4f.css",
-    "main.js": "/timetable-bsaa/static/js/main.658bbef8.js",
+    "main.js": "/timetable-bsaa/static/js/main.aa992c44.js",
     "static/js/453.f814eb69.chunk.js": "/timetable-bsaa/static/js/453.f814eb69.chunk.js",
     "index.html": "/timetable-bsaa/index.html",
     "main.787c5f4f.css.map": "/timetable-bsaa/static/css/main.787c5f4f.css.map",
-    "main.658bbef8.js.map": "/timetable-bsaa/static/js/main.658bbef8.js.map",
+    "main.aa992c44.js.map": "/timetable-bsaa/static/js/main.aa992c44.js.map",
     "453.f814eb69.chunk.js.map": "/timetable-bsaa/static/js/453.f814eb69.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.787c5f4f.css",
-    "static/js/main.658bbef8.js"
+    "static/js/main.aa992c44.js"
   ]
 }
