@@ -55,10 +55,10 @@ export const updateData = createAsyncThunk(
       const response = await fetch("https://bgaa.by/test_result", {
         method: "POST",
         headers: {
-          mode: "cors",
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "https://bgaa.by/",
-          "Access-Control-Request-Method": "POST",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Request-Method": "GET, POST, PUT, DELETE",
         },
         body: JSON.stringify(updateData),
       });
