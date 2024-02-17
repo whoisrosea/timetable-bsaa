@@ -1,34 +1,39 @@
 import React, { useEffect } from "react";
-
 import "./App.css";
-import { fetchedData } from "./data";
 import Card from "./components/Card";
 import { useAppDispatch, useAppSelector } from "./redux/store";
-import { addAllCards, addAllTeachers } from "./redux/dataSlice";
+import {  fetchCards, updateData } from "./redux/dataSlice";
 import { Button } from "antd";
 
 function App() {
   const dispatch = useAppDispatch();
+  const data = useAppSelector((state) => state.data);
   useEffect(() => {
-    dispatch(addAllCards(fetchedData.data));
-    dispatch(addAllTeachers(fetchedData.teachers));
-  }, [dispatch]);
-
+    if (data.cards.length === 0) {
+      dispatch(fetchCards());
+    }
+  }, [data.cards.length, dispatch]);
   const cards = useAppSelector((state) => state.data.cards);
-  const teachers = useAppSelector((state) => state.data.teachers);
+  
   return (
+    data.status ==="loading" ? (<div>"loading..."</div>) : data.error ? (<div>{data.error}</div>) : (
     <div className="App">
-      {cards.map((card) => (
-        <Card key={card.uniqueId} teachers={teachers} card={card}></Card>
-      ))}
+      <div className="AppCards">
+        {cards?.map((card) => (
+          <Card key={card.uniqueId} teachers={data.teachers} card={card}></Card>
+        ))}
+      </div>
       <Button
+        className="AppButton"
         onClick={() => {
-          console.log(cards);
+          dispatch(updateData(data))
+          
         }}
       >
         Сохранить
       </Button>
-    </div>
+    </div>)
+    
   );
 }
 

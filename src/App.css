@@ -1,4 +1,21 @@
+body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.AppButton {
+  width: 30%;
+  background-color: rgba(178, 214, 255, 0.407);
+  margin-bottom: 40px;
+  margin-top: 20px;
+  color: rgba(0, 0, 0, 0.776);
+}
+.AppCards {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;

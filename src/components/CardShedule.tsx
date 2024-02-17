@@ -52,7 +52,11 @@ const CardSchedule: FC<CardScheduleProps> = ({ card, teachers }) => {
         <div>{hours}</div>
         <div className="selectContainer">
           <TeacherSelect
-            value={card.podgroups[0][`${key}Teacher`]}
+            value={
+              card.podgroups[0][`${key}Teacher`]
+                ? card.podgroups[0][`${key}Teacher`]
+                : "Вакансия"
+            }
             teachers={teachers}
             onChange={(teacherId: string) => onChangeTeacher(key, 0, teacherId)}
             disabled={Number(hours) > 0 ? false : true}
@@ -75,7 +79,11 @@ const CardSchedule: FC<CardScheduleProps> = ({ card, teachers }) => {
         {card.countPodgroups === "2" && (
           <div className="selectContainer">
             <TeacherSelect
-              value={card.podgroups[1][`${key}Teacher`]}
+              value={
+                card.podgroups[1][`${key}Teacher`]
+                  ? card.podgroups[1][`${key}Teacher`]
+                  : "Вакансия"
+              }
               teachers={teachers}
               onChange={(teacherId: string) =>
                 onChangeTeacher(key, 1, teacherId)

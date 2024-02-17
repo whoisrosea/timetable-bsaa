@@ -1,13 +1,18 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICard, IPodgroup, ITeacher } from "../types/types";
 
 interface dataState {
   cards: ICard[];
   teachers: ITeacher[];
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
 }
+
 const initialState: dataState = {
   cards: [],
   teachers: [],
+  status: "idle",
+  error: null,
 };
 
 interface AddPodgroupPayload {
@@ -35,6 +40,31 @@ interface updateAdditionalInfoPayload {
   uniqueId: string;
   value: string;
 }
+
+export const fetchCards = createAsyncThunk("card/fetch", async (thunkAPI) => {
+  const response = await fetch("https://bgaa.by/test");
+  const data = response.json();
+  return data;
+});
+
+export const updateData = createAsyncThunk(
+  "data/update",
+  async (updateData: dataState, thunkAPI) => {
+    try {
+      const response = await fetch("https://bgaa.by/test_result", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateData),
+      });
+      const data = await response.json();
+      return data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 export const dataSlice = createSlice({
   name: "data",
   initialState,
@@ -170,6 +200,27 @@ export const dataSlice = createSlice({
         state.cards[cardIndex].additionalInfo = action.payload.value;
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCards.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        fetchCards.fulfilled,
+        (
+          state,
+          action: PayloadAction<{ data: ICard[]; teachers: ITeacher[] }>
+        ) => {
+          state.status = "succeeded";
+          state.cards = action.payload.data;
+          state.teachers = action.payload.teachers;
+        }
+      )
+      .addCase(fetchCards.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something went wrong";
+      });
   },
 });
 
