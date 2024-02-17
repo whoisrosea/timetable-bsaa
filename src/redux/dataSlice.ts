@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICard, IPodgroup, ITeacher } from "../types/types";
 
+//TODO: fix types naming
 interface dataState {
   cards: ICard[];
   teachers: ITeacher[];
@@ -41,7 +42,7 @@ interface updateAdditionalInfoPayload {
   value: string;
 }
 
-export const fetchCards = createAsyncThunk("card/fetch", async (thunkAPI) => {
+export const fetchCards = createAsyncThunk("card/fetch", async (_) => {
   const response = await fetch("https://bgaa.by/test");
   const data = response.json();
   return data;
@@ -54,7 +55,10 @@ export const updateData = createAsyncThunk(
       const response = await fetch("https://bgaa.by/test_result", {
         method: "POST",
         headers: {
+          mode: "cors",
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "https://bgaa.by/",
+          "Access-Control-Request-Method": "POST",
         },
         body: JSON.stringify(updateData),
       });
@@ -97,11 +101,11 @@ export const dataSlice = createSlice({
           state.cards[cardIndex].podgroups.length.toString();
 
         state.cards[cardIndex].podgroups[0].countStudents = Math.round(
-          Number(state.cards[cardIndex].podgroups[0].countStudents) / 2
+          +state.cards[cardIndex].podgroups[0].countStudents / 2
         ).toString();
         state.cards[cardIndex].podgroups[1].countStudents = (
-          Number(state.cards[cardIndex].studentsNumber) -
-          Number(state.cards[cardIndex].podgroups[0].countStudents)
+          +state.cards[cardIndex].studentsNumber -
+          +state.cards[cardIndex].podgroups[0].countStudents
         ).toString();
       }
     },

@@ -12,11 +12,11 @@ function App() {
     if (data.cards.length === 0) {
       dispatch(fetchCards());
     }
-  }, [data.cards.length, dispatch]);
+  }, [data, dispatch]);
   const cards = useAppSelector((state) => state.data.cards);
   
   return (
-    data.status ==="loading" ? (<div>"loading..."</div>) : data.error ? (<div>{data.error}</div>) : (
+    data.status === "loading" ? (<div>"loading..."</div>) : data.error ? (<div>{data.error}</div>) : (
     <div className="App">
       <div className="AppCards">
         {cards?.map((card) => (

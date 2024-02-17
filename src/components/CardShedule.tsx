@@ -59,6 +59,7 @@ const CardSchedule: FC<CardScheduleProps> = ({ card, teachers }) => {
             }
             teachers={teachers}
             onChange={(teacherId: string) => onChangeTeacher(key, 0, teacherId)}
+            //TODO: fix casting
             disabled={Number(hours) > 0 ? false : true}
           />
           {key === "lecture" && (
@@ -88,7 +89,7 @@ const CardSchedule: FC<CardScheduleProps> = ({ card, teachers }) => {
               onChange={(teacherId: string) =>
                 onChangeTeacher(key, 1, teacherId)
               }
-              disabled={Number(hours) > 0 ? false : true}
+              disabled={hours > "0" ? false : true}
             />
             {key === "lecture" && (
               <SelectOutlined
