@@ -1,15 +1,16 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICard, IPodgroup, ITeacher } from "../types/types";
+import axios from "axios";
 
 //TODO: fix types naming
-interface dataState {
+interface DataState {
   cards: ICard[];
   teachers: ITeacher[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
-const initialState: dataState = {
+const initialState: DataState = {
   cards: [],
   teachers: [],
   status: "idle",
@@ -21,23 +22,23 @@ interface AddPodgroupPayload {
   podgroup: IPodgroup;
 }
 
-interface updateTeacherPayload {
+interface UpdateTeacherPayload {
   uniqueId: string;
   podgroupIndex: number;
   type: string;
   teacherId: string;
 }
-interface setOneTeacherPayload {
+interface SetOneTeacherPayload {
   podgroup: number;
   uniqueId: string;
   teacherId: string;
 }
-interface podgroupNumberUpdatePayload {
+interface PodgroupNumberUpdatePayload {
   value: number;
   podgroup: number;
   uniqueId: string;
 }
-interface updateAdditionalInfoPayload {
+interface UpdateAdditionalInfoPayload {
   uniqueId: string;
   value: string;
 }
@@ -50,19 +51,12 @@ export const fetchCards = createAsyncThunk("card/fetch", async (_) => {
 
 export const updateData = createAsyncThunk(
   "data/update",
-  async (updateData: dataState, thunkAPI) => {
+  async (updateData: DataState, thunkAPI) => {
     try {
-      const response = await fetch("https://bgaa.by/test_result", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Request-Method": "GET, POST, PUT, DELETE",
-        },
-        body: JSON.stringify(updateData),
-      });
-      const data = await response.json();
+      const data = await axios.post(
+        "https://bgaa.by/test_result", // выдает 404 ошибку при обращении к данному url
+        JSON.stringify(updateData)
+      );
       return data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);
@@ -121,7 +115,7 @@ export const dataSlice = createSlice({
         state.cards[cardIndex].countPodgroups = "1";
       }
     },
-    setOneTeacher: (state, action: PayloadAction<setOneTeacherPayload>) => {
+    setOneTeacher: (state, action: PayloadAction<SetOneTeacherPayload>) => {
       const cardIndex = state.cards.findIndex(
         (card) => card.uniqueId === action.payload.uniqueId
       );
@@ -138,7 +132,7 @@ export const dataSlice = createSlice({
       }
     },
 
-    updateTeacher: (state, action: PayloadAction<updateTeacherPayload>) => {
+    updateTeacher: (state, action: PayloadAction<UpdateTeacherPayload>) => {
       const { uniqueId, podgroupIndex, type, teacherId } = action.payload;
       const card = state.cards.find((card) => card.uniqueId === uniqueId);
       if (card) {
@@ -171,7 +165,7 @@ export const dataSlice = createSlice({
     },
     podgroupNumberUpdate: (
       state,
-      action: PayloadAction<podgroupNumberUpdatePayload>
+      action: PayloadAction<PodgroupNumberUpdatePayload>
     ) => {
       const { uniqueId, podgroup, value } = action.payload;
 
@@ -180,10 +174,8 @@ export const dataSlice = createSlice({
       );
       if (cardIndex !== -1) {
         const card = state.cards[cardIndex];
-        const currentPodgroupStudents = Number(
-          card.podgroups[podgroup].countStudents
-        );
-        const totalStudents = Number(card.studentsNumber);
+        const currentPodgroupStudents = +card.podgroups[podgroup].countStudents;
+        const totalStudents = +card.studentsNumber;
 
         const newTotalStudents =
           totalStudents - currentPodgroupStudents + value;
@@ -195,7 +187,7 @@ export const dataSlice = createSlice({
     },
     updateAdditionalInfo: (
       state,
-      action: PayloadAction<updateAdditionalInfoPayload>
+      action: PayloadAction<UpdateAdditionalInfoPayload>
     ) => {
       const cardIndex = state.cards.findIndex(
         (card) => card.uniqueId === action.payload.uniqueId

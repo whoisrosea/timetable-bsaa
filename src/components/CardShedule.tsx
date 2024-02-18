@@ -60,7 +60,7 @@ const CardSchedule: FC<CardScheduleProps> = ({ card, teachers }) => {
             teachers={teachers}
             onChange={(teacherId: string) => onChangeTeacher(key, 0, teacherId)}
             //TODO: fix casting
-            disabled={Number(hours) > 0 ? false : true}
+            disabled={hours > "0" ? false : true}
           />
           {key === "lecture" && (
             <SelectOutlined
@@ -163,7 +163,7 @@ const CardSchedule: FC<CardScheduleProps> = ({ card, teachers }) => {
             onChange={(
               e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
             ) => {
-              const value = Number(e.target.value);
+              const value = +e.target.value;
               dispatch(
                 podgroupNumberUpdate({
                   value: value,
@@ -179,7 +179,7 @@ const CardSchedule: FC<CardScheduleProps> = ({ card, teachers }) => {
             onChange={(
               e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
             ) => {
-              const value = Number(e.target.value);
+              const value = +e.target.value;
               dispatch(
                 podgroupNumberUpdate({
                   value: value,
